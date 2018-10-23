@@ -51,17 +51,12 @@ type procState struct {
 	csec    int64
 }
 
-// Do the plugin
-func Do() {
-	ckr := run(os.Args[1:])
-	ckr.Name = "Procs"
-	ckr.Exit()
-}
-
-func run(args []string) *checkers.Checker {
+// Run check with arguments
+func Run(args []string) *checkers.Checker {
 	_, err := flags.ParseArgs(&opts, args)
 	if err != nil {
-		os.Exit(1)
+		return checkers.NewChecker(checkers.UNKNOWN,
+			fmt.Sprintf("Failure to parse flags - %s", err.Error()))
 	}
 
 	// for backward compatibility
